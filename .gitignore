@@ -1,3 +1,7 @@
 secrets.txt
 
 .ipynb_checkpoints/
+
+*.txt
+
+*.html
