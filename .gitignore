@@ -1,9 +1,11 @@
+.DS_Store
+
 secrets.txt
 
 .ipynb_checkpoints/
 
 *.txt
-
+*.pdf
 *.html
 
 StuffILearned.md
