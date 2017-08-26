@@ -8,4 +8,6 @@ secrets.txt
 *.pdf
 *.html
 
+*.pyc
+
 StuffILearned.md
