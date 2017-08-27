@@ -5,7 +5,7 @@ from itertools import chain
 
 from utils import normalize, escape_re_string
 
-UNITS = {"cup": ["cups", "cup", "c.", "c"], "fluid_ounce": ["fl. oz.", "fl oz", "fluid ounce", "fluid ounces"],
+UNITS = {"cup": ["cups", "cup", "c.", "c"], "fluid_ounce": ["fl. oz.", "fl oz", "fluid ounce", "fluid oz", "fluid ounces"],
          "gallon": ["gal", "gal.", "gallon", "gallons"], "ounce": ["oz", "oz.", "ounce", "ounces"],
          "pint": ["pt", "pt.", "pint", "pints"], "pound": ["lb", "lb.", "pound", "pounds"],
          "quart": ["qt", "qt.", "qts", "qts.", "quart", "quarts"],
@@ -15,8 +15,9 @@ UNITS = {"cup": ["cups", "cup", "c.", "c"], "fluid_ounce": ["fl. oz.", "fl oz", 
          "liter": ["l", "l.", "liter", "liters"], "milligram": ["mg", "mg.", "milligram", "milligrams"],
          "milliliter": ["ml", "ml.", "milliliter", "milliliters"], "pinch": ["pinch", "pinches"],
          "dash": ["dash", "dashes"], "touch": ["touch", "touches"], "handful": ["handful", "handfuls"],
-         "stick": ["stick", "sticks"], "clove": ["cloves", "clove"], "can": ["cans", "can"], "large": ["large"],
-         "small": ["small"], "scoop": ["scoop", "scoops"], "filets": ["filet", "filets"], "sprig": ["sprigs", "sprig"]}
+         "stick": ["stick", "sticks"], "clove": ["cloves", "clove"], "can": ["cans", "can"],
+         "large": ["large","whole large"], "medium": ["medium"], "small": ["small"], "scoop": ["scoop", "scoops"],
+         "filets": ["filet", "filets"],"sprig": ["sprigs", "sprig"],"whole": ["whole"],"splash": ['splash','splashes']}
 
 NUMBERS = ['seventeen', 'eighteen', 'thirteen', 'nineteen', 'fourteen', 'sixteen', 'fifteen', 'seventy', 'twelve',
            'eleven', 'eighty', 'thirty', 'ninety', 'twenty', 'seven', 'fifty', 'sixty', 'forty', 'three', 'eight',
@@ -32,17 +33,24 @@ PARSER_RE = re.compile(
     r'(?P<quantity>(?:[\d\.,][\d\.,\s/]*)?\s*(?:(?:%s)\s*)*)?(\s*(?P<unit>%s)\s+)?(\s*(?:%s)\s+)?(\s*(?P<name>.+))?' % (
         '|'.join(NUMBERS), '|'.join(a), '|'.join(prepositions)))
 
-
 def parse(st):
     """
 
     :param st:
     :return:
     """
-    st = normalize(st)
+    st = normalize(st.lower())
     res = PARSER_RE.match(st)
+        
+    # Replace unit variation with standard unit key (e.g. fl. oz. becomes fluid_ounce)
+    try:
+        unit = [key for key, vals in UNITS.iteritems() if res.group('unit') in vals][0]
+    except:
+        unit = ''
+
+    # TODO: Add option to handle the "1 (7.5 oz) can of tomato" scenario
 
     return {
-        'measure': (res.group('quantity') or '').strip() + ' ' + (res.group('unit') or '').strip(),
+        'measure': (res.group('quantity') or '').strip() + ' ' + (unit or '').strip(),
         'name': (res.group('name') or '').strip()
     }
