@@ -15,7 +15,7 @@ UNITS = {"cup": ["cups", "cup", "c.", "c"], "fluid_ounce": ["fl. oz.", "fl oz", 
          "liter": ["l", "l.", "liter", "liters"], "milligram": ["mg", "mg.", "milligram", "milligrams"],
          "milliliter": ["ml", "ml.", "milliliter", "milliliters"], "pinch": ["pinch", "pinches"],
          "dash": ["dash", "dashes"], "touch": ["touch", "touches"], "handful": ["handful", "handfuls"],
-         "stick": ["stick", "sticks"], "clove": ["cloves", "clove"], "can": ["cans", "can"],
+         "stick": ["stick", "sticks"], "clove": ["cloves", "clove"], "can": ["cans", "can"],"slice":["slice","slices"],
          "large": ["large","whole large"], "medium": ["medium"], "small": ["small"], "scoop": ["scoop", "scoops"],
          "filets": ["filet", "filets"],"sprig": ["sprigs", "sprig"],"whole": ["whole"],"splash": ['splash','splashes']}
 
@@ -51,6 +51,6 @@ def parse(st):
     # TODO: Add option to handle the "1 (7.5 oz) can of tomato" scenario
 
     return {
-        'measure': (res.group('quantity') or '').strip() + ' ' + (unit or '').strip(),
+        'measure': ((res.group('quantity') or '').strip() + ' ' + (unit or '').strip()).strip(),
         'name': (res.group('name') or '').strip()
     }
