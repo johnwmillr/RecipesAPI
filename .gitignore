@@ -5,8 +5,9 @@ secrets.txt
 .ipynb_checkpoints/
 
 *.txt
-
-*.html
 *.pdf
+*.html
+
+*.pyc
 
 StuffILearned.md
